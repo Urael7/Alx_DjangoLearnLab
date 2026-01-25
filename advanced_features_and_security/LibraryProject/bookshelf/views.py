@@ -1,7 +1,8 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import permission_required
 from .models import Book
-from .forms import BookSearchForm, ExampleForm
+from .forms import BookSearchForm
+from .forms import ExampleForm
 from relationship_app.models import Library
 
 # View for all libraries
