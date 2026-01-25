@@ -1,6 +1,21 @@
 {% extends 'admin/base_site.html' %}
 {% block content %}
 <h1>All Books</h1>
+
+<form method="get" action="">
+  {% csrf_token %}
+  {{ form.q.label_tag }} {{ form.q }}
+  <button type="submit">Search</button>
+  {% if form.non_field_errors %}
+    <div class="errors">{{ form.non_field_errors }}</div>
+  {% endif %}
+  {% for field in form %}
+    {% for error in field.errors %}
+      <div class="errors">{{ error }}</div>
+    {% endfor %}
+  {% endfor %}
+  <hr />
+</form>
 <ul>
   {% for book in books %}
     <li>{{ book.title }} by {{ book.author }}{% if book.published_date %} ({{ book.published_date }}){% endif %}</li>

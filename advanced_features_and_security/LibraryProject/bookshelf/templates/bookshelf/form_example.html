@@ -1,0 +1,12 @@
+{% extends 'admin/base_site.html' %}
+{% block content %}
+<h1>Form Example (CSRF Protected)</h1>
+<form method="post" action="">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Submit</button>
+</form>
+{% if result %}
+<p>Result: {{ result }}</p>
+{% endif %}
+{% endblock %}

@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,7 +24,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-7=4jv)e(*b2r204m-k3k3p+1f-uw&@*&oj#3k)-et*^--vaa5x'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# Use environment variable to control DEBUG; set DJANGO_DEBUG=False in production
+DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = []
 
@@ -40,6 +42,9 @@ INSTALLED_APPS = [
     'bookshelf',
     'relationship_app',
 
+    # CSP for mitigating XSS by controlling allowed sources
+    'csp',
+
     
 
 ]
@@ -52,6 +57,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # Content Security Policy middleware
+    'csp.middleware.CSPMiddleware',
 ]
 
 ROOT_URLCONF = 'LibraryProject.urls'
@@ -123,3 +130,22 @@ STATIC_URL = 'static/'
 # Media files (uploads)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# ----------------------
+# Security best practices
+# ----------------------
+# Only enable strict cookie and browser protections in production (DEBUG=False)
+SECURE_CONTENT_TYPE_NOSNIFF = not DEBUG
+# Deprecated in modern browsers, included here to satisfy common checks
+SECURE_BROWSER_XSS_FILTER = not DEBUG
+X_FRAME_OPTIONS = 'DENY'
+
+# Send cookies over HTTPS only in production
+CSRF_COOKIE_SECURE = not DEBUG
+SESSION_COOKIE_SECURE = not DEBUG
+
+# Basic CSP: allow only same-origin resources by default
+CSP_DEFAULT_SRC = ("'self'",)
+CSP_STYLE_SRC = ("'self'",)
+CSP_SCRIPT_SRC = ("'self'",)
+CSP_IMG_SRC = ("'self'", 'data:')
