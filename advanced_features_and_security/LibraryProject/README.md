@@ -46,6 +46,11 @@ python manage.py seed_roles
   - `SECURE_CONTENT_TYPE_NOSNIFF`, `SECURE_BROWSER_XSS_FILTER`, `X_FRAME_OPTIONS='DENY'`
   - `CSRF_COOKIE_SECURE=True`, `SESSION_COOKIE_SECURE=True`
   - Content Security Policy via `django-csp` with `CSP_DEFAULT_SRC 'self'` etc.
+  6. HTTPS & Redirects
+  - HTTPS is enforced in production (when `DJANGO_DEBUG=False`) via:
+    - `SECURE_SSL_REDIRECT=True`
+    - HSTS: `SECURE_HSTS_SECONDS=31536000`, `SECURE_HSTS_INCLUDE_SUBDOMAINS=True`, `SECURE_HSTS_PRELOAD=True`
+  - See deployment steps and Nginx example in `DEPLOYMENT.md`.
 
 Security demo
 

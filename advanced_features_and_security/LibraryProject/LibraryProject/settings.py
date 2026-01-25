@@ -144,6 +144,20 @@ X_FRAME_OPTIONS = 'DENY'
 CSRF_COOKIE_SECURE = not DEBUG
 SESSION_COOKIE_SECURE = not DEBUG
 
+# Enforce HTTPS in production
+# Redirect all HTTP requests to HTTPS
+SECURE_SSL_REDIRECT = not DEBUG
+
+# HTTP Strict Transport Security (HSTS)
+# Instruct browsers to only use HTTPS for a period of time
+SECURE_HSTS_SECONDS = 31536000 if not DEBUG else 0  # 1 year in prod, disabled in dev
+SECURE_HSTS_INCLUDE_SUBDOMAINS = not DEBUG
+SECURE_HSTS_PRELOAD = not DEBUG
+
+# If running behind a reverse proxy (e.g., Nginx) that sets X-Forwarded-Proto,
+# uncomment the next line so Django knows the original scheme was HTTPS
+# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 # Basic CSP: allow only same-origin resources by default
 CSP_DEFAULT_SRC = ("'self'",)
 CSP_STYLE_SRC = ("'self'",)
