@@ -5,8 +5,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'relationship_app',
+
+    'bookshelf',        # App containing CustomUser
+    'relationship_app', # Other app
 ]
 
-AUTH_USER_MODEL = 'relationship_app.CustomUser'
-
+# Point to the correct app where CustomUser is defined
+AUTH_USER_MODEL = 'bookshelf.CustomUser'

@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     
 
 ]
-
+AUTH_USER_MODEL = 'bookshelf.CustomUser'
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -120,4 +120,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
-AUTH_USER_MODEL = 'relationship_app.CustomUser'
+# Media files (uploads)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
