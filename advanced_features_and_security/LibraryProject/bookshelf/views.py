@@ -15,3 +15,10 @@ def library_detail(request, pk):
     library = get_object_or_404(Library, pk=pk)
     books = library.books.all()  # related_name in ForeignKey
     return render(request, "bookshelf/library_detail.html", {"library": library, "books": books})
+
+
+# View for all books
+@permission_required('bookshelf.can_view', raise_exception=True)
+def book_list(request):
+    books = Book.objects.all()
+    return render(request, "bookshelf/book_list.html", {"books": books})
