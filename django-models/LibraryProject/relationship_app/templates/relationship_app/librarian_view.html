@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <title>Librarian Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <h1>Librarian View</h1>
+    <p>Welcome, Librarian. You can manage books and libraries.</p>
+    <a href="{% url 'logout' %}">Logout</a>
+</body>
+</html>

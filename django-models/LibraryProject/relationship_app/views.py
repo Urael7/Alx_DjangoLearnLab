@@ -6,6 +6,8 @@ from django.contrib.auth import login
 from django.contrib.auth.views import LogoutView
 from django.contrib.auth import logout
 from django.shortcuts import redirect
+from django.contrib.auth.decorators import user_passes_test, login_required
+from django.http import HttpResponseForbidden
 
 # Function-based view for listing books
 def list_books(request):
@@ -50,3 +52,25 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect('login')  # redirect to login page after logout
+
+
+# =========================
+# ROLE-BASED ACCESS VIEWS
+# =========================
+def _has_role(user, role):
+    return user.is_authenticated and hasattr(user, 'profile') and user.profile.role == role
+
+
+@user_passes_test(lambda u: _has_role(u, 'Admin'))
+def admin_view(request):
+    return render(request, 'relationship_app/admin_view.html')
+
+
+@user_passes_test(lambda u: _has_role(u, 'Librarian'))
+def librarian_view(request):
+    return render(request, 'relationship_app/librarian_view.html')
+
+
+@user_passes_test(lambda u: _has_role(u, 'Member'))
+def member_view(request):
+    return render(request, 'relationship_app/member_view.html')

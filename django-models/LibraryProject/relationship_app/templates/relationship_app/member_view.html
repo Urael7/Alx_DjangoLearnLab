@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <title>Member Area</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <h1>Member View</h1>
+    <p>Welcome, Member. Browse and view content.</p>
+    <a href="{% url 'logout' %}">Logout</a>
+</body>
+</html>
