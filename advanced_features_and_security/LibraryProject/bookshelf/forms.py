@@ -8,3 +8,8 @@ class BookSearchForm(forms.Form):
         required=False,
         widget=forms.TextInput(attrs={"placeholder": "Search by title"}),
     )
+
+
+class ExampleForm(forms.Form):
+    name = forms.CharField(label="Name", max_length=100, required=False)
+    message = forms.CharField(label="Message", widget=forms.Textarea, required=False)
