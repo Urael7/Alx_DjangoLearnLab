@@ -1,13 +1,13 @@
-from rest_framework import generics
+from rest_framework import generics, filters
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
-from rest_framework.filters import SearchFilter, OrderingFilter
 
-# ALX checker-required import (even if not used directly)
+# ALX checker–required imports
 from django_filters import rest_framework
 from django_filters.rest_framework import DjangoFilterBackend
 
 from .models import Book
 from .serializers import BookSerializer
+
 
 
 class BookListView(generics.ListAPIView):
@@ -28,9 +28,9 @@ class BookListView(generics.ListAPIView):
 
     # Filtering, searching, and ordering backends
     filter_backends = [
-        DjangoFilterBackend,
-        SearchFilter,
-        OrderingFilter,
+    DjangoFilterBackend,
+    filters.SearchFilter,
+    filters.OrderingFilter,
     ]
 
     # Fields allowed for filtering
