@@ -1,4 +1,5 @@
-from rest_framework import generics, permissions
+from rest_framework import generics
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from .models import Book
 from .serializers import BookSerializer
 
@@ -6,44 +7,43 @@ from .serializers import BookSerializer
 class BookListView(generics.ListAPIView):
     """
     ListView:
-    Handles retrieving all Book instances.
-    Accessible to both authenticated and unauthenticated users.
+    Retrieves all Book instances.
+    Read-only access for unauthenticated users.
     """
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 
 class BookDetailView(generics.RetrieveAPIView):
     """
     DetailView:
-    Retrieves a single Book instance by ID (pk).
-    Accessible to both authenticated and unauthenticated users.
+    Retrieves a single Book instance by ID.
+    Read-only access for unauthenticated users.
     """
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 
 class BookCreateView(generics.CreateAPIView):
     """
     CreateView:
-    Allows authenticated users to create new Book instances.
-    Includes serializer validation logic.
+    Allows authenticated users to create Book instances.
     """
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
 
 class BookUpdateView(generics.UpdateAPIView):
     """
     UpdateView:
-    Allows authenticated users to update existing Book instances.
+    Allows authenticated users to update Book instances.
     """
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
 
 class BookDeleteView(generics.DestroyAPIView):
@@ -53,4 +53,4 @@ class BookDeleteView(generics.DestroyAPIView):
     """
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated]
