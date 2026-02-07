@@ -1,9 +1,23 @@
+# Python bytecode
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
+
+# Virtual environments
+venv/
+env/
 .env
-db.sqlite3
 .env.*
+
+# Django
+db.sqlite3
+*.log
+
+# IDE / Editor settings
 .vscode/
 .idea/
+
+# OS files
+.DS_Store
+Thumbs.db
