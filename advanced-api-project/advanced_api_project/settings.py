@@ -37,9 +37,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Third-party apps
     'rest_framework',
-    'api',
+    'rest_framework.authtoken',
     'django_filters',
+
+    # Local apps
+    'api',
 ]
 
 MIDDLEWARE = [
@@ -119,14 +124,19 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+
 # Django REST Framework global configuration
 REST_FRAMEWORK = {
-    # Default permission policy
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
     ],
 
-    # Filtering, searching, and ordering backends
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+    ],
+
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend',
         'rest_framework.filters.SearchFilter',
