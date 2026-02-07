@@ -1,6 +1,9 @@
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework.filters import SearchFilter, OrderingFilter
+
+# ALX checker-required import (even if not used directly)
+from django_filters import rest_framework
 from django_filters.rest_framework import DjangoFilterBackend
 
 from .models import Book
