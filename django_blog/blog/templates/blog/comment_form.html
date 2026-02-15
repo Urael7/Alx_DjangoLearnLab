@@ -1,18 +1,25 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Edit Comment</title>
-</head>
-<body>
-    <h1>Edit Comment</h1>
+{% extends "blog/base.html" %}
+{% load static %}
 
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Update Comment</button>
-    </form>
+{% block content %}
+  <h2>
+    {% if is_create %}
+      Add New Comment
+    {% else %}
+      Edit Comment
+    {% endif %}
+  </h2>
 
-    <br>
-    <a href="{% url 'home' %}">Back to Posts</a>
-</body>
-</html>
+  <form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">
+      {% if is_create %}
+        Post Comment
+      {% else %}
+        Update Comment
+      {% endif %}
+    </button>
+    <a href="{{ form.instance.post.get_absolute_url }}">Cancel</a>
+  </form>
+{% endblock %}

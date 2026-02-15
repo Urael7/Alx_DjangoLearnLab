@@ -15,6 +15,7 @@ urlpatterns = [
     # -----------------------------
     # Comment URLs (Checker-compliant)
     # -----------------------------
+    # Corrected URL for creating a new comment on a specific post
     path("posts/<int:pk>/comments/new/", views.CommentCreateView.as_view(), name="add_comment"),
     path("comment/<int:pk>/update/", views.CommentUpdateView.as_view(), name="comment_update"),
     path("comment/<int:pk>/delete/", views.CommentDeleteView.as_view(), name="comment_delete"),
