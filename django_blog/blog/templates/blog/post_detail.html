@@ -9,6 +9,15 @@
     <p>{{ object.content }}</p>
 
     <p><small>By {{ object.author }} | {{ object.created_at }}</small></p>
+    {% if object.tags.all %}
+        <p>
+            <small>Tags:
+            {% for tag in object.tags.all %}
+                <a href="{% url 'tag_posts' tag.slug %}">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+            </small>
+        </p>
+    {% endif %}
 
     <hr>
 

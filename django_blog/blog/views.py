@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.db.models import Q
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -10,8 +11,10 @@ from django.views.generic import (
     DeleteView
 )
 
+from taggit.models import Tag
+
 from .models import Post, Comment
-from .forms import CustomUserCreationForm, UserUpdateForm, CommentForm
+from .forms import CustomUserCreationForm, UserUpdateForm, CommentForm, PostForm
 
 
 # ------------------------
@@ -63,7 +66,7 @@ class PostDetailView(DetailView):
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
     template_name = "blog/post_form.html"
-    fields = ["title", "content"]
+    form_class = PostForm
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -73,7 +76,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
     template_name = "blog/post_form.html"
-    fields = ["title", "content"]
+    form_class = PostForm
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -143,3 +146,49 @@ class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def test_func(self):
         comment = self.get_object()
         return self.request.user == comment.author
+
+
+# ------------------------
+# Tagging and Search Views
+# ------------------------
+
+class TaggedPostListView(ListView):
+    model = Post
+    template_name = "blog/tag_posts.html"
+    context_object_name = "posts"
+    ordering = ["-created_at"]
+
+    def get_queryset(self):
+        tag_slug = self.kwargs.get("tag_slug", "")
+        return Post.objects.filter(tags__slug=tag_slug).distinct().order_by("-created_at")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        tag_slug = self.kwargs.get("tag_slug", "")
+        context["tag"] = Tag.objects.filter(slug=tag_slug).first()
+        return context
+
+
+class SearchResultsView(ListView):
+    model = Post
+    template_name = "blog/search_results.html"
+    context_object_name = "posts"
+
+    def get_queryset(self):
+        query = self.request.GET.get("q", "").strip()
+        if not query:
+            return Post.objects.none()
+        return (
+            Post.objects.filter(
+                Q(title__icontains=query)
+                | Q(content__icontains=query)
+                | Q(tags__name__icontains=query)
+            )
+            .distinct()
+            .order_by("-created_at")
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["query"] = self.request.GET.get("q", "").strip()
+        return context

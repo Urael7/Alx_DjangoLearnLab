@@ -13,6 +13,12 @@ urlpatterns = [
     path("post/<int:pk>/delete/", views.PostDeleteView.as_view(), name="post_delete"),
 
     # -----------------------------
+    # Tagging and Search URLs
+    # -----------------------------
+    path("tags/<slug:tag_slug>/", views.TaggedPostListView.as_view(), name="tag_posts"),
+    path("search/", views.SearchResultsView.as_view(), name="post_search"),
+
+    # -----------------------------
     # Comment URLs (Checker-compliant)
     # -----------------------------
     # Corrected URL for creating a new comment on a specific post

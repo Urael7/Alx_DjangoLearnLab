@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tag Results</title>
+</head>
+<body>
+    <h1>Posts Tagged{% if tag %}: {{ tag.name }}{% endif %}</h1>
+
+    <form method="get" action="{% url 'post_search' %}">
+        <input type="text" name="q" placeholder="Search posts" value="{{ request.GET.q }}">
+        <button type="submit">Search</button>
+    </form>
+
+    <hr>
+
+    {% if not tag %}
+        <p>Tag not found.</p>
+    {% else %}
+        {% for post in posts %}
+            <h2>
+                <a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a>
+            </h2>
+            <p>{{ post.content|truncatechars:100 }}</p>
+            <p><small>By {{ post.author }} | {{ post.created_at }}</small></p>
+            {% if post.tags.all %}
+                <p>
+                    <small>Tags:
+                    {% for tag in post.tags.all %}
+                        <a href="{% url 'tag_posts' tag.slug %}">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                    </small>
+                </p>
+            {% endif %}
+            <hr>
+        {% empty %}
+            <p>No posts with this tag yet.</p>
+        {% endfor %}
+    {% endif %}
+
+    <a href="{% url 'home' %}">Back to Posts</a>
+</body>
+</html>
