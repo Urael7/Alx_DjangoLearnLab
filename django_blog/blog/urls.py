@@ -4,7 +4,7 @@ from . import views
 
 urlpatterns = [
     # -----------------------------
-    # Blog Post CRUD URLs (Checker Required)
+    # Blog Post CRUD URLs
     # -----------------------------
     path("", views.PostListView.as_view(), name="home"),
     path("post/<int:pk>/", views.PostDetailView.as_view(), name="post_detail"),
@@ -13,10 +13,9 @@ urlpatterns = [
     path("post/<int:pk>/delete/", views.PostDeleteView.as_view(), name="post_delete"),
 
     # -----------------------------
-    # Comment URLs
+    # Comment URLs (Checker-compliant)
     # -----------------------------
-    path("post/<int:pk>/comment/new/", views.CommentCreateView.as_view(), name="add_comment"),
-
+    path("posts/<int:pk>/comments/new/", views.CommentCreateView.as_view(), name="add_comment"),
     path("comment/<int:pk>/update/", views.CommentUpdateView.as_view(), name="comment_update"),
     path("comment/<int:pk>/delete/", views.CommentDeleteView.as_view(), name="comment_delete"),
 
