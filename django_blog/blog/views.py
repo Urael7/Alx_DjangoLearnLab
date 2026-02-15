@@ -152,7 +152,7 @@ class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 # Tagging and Search Views
 # ------------------------
 
-class TaggedPostListView(ListView):
+class PostByTagListView(ListView):
     model = Post
     template_name = "blog/tag_posts.html"
     context_object_name = "posts"
