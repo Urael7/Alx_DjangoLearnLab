@@ -1,23 +1,22 @@
-{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{{ post.title }}</title>
-    <link rel="stylesheet" href="{% static 'blog/style.css' %}">
+    <title>{{ object.title }}</title>
 </head>
 <body>
+    <h1>{{ object.title }}</h1>
 
-    <h1>{{ post.title }}</h1>
-    <p>{{ post.content }}</p>
-    <small>Published on: {{ post.published_date }}</small>
-    <br><br>
-{% if user.is_authenticated and user == post.author %}
-    <a href="{% url 'post_update' post.pk %}">Edit</a> |
-    <a href="{% url 'post_delete' post.pk %}">Delete</a>
-{% endif %}
+    <p>{{ object.content }}</p>
 
-    <br><br>
-    <a href="/">⬅ Back to Home</a>
+    <p><small>By {{ object.author }} | {{ object.created_at }}</small></p>
 
+    <hr>
+
+    <a href="{% url 'home' %}">Back to Posts</a>
+
+    {% if user == object.author %}
+        | <a href="{% url 'post_update' object.pk %}">Edit</a>
+        | <a href="{% url 'post_delete' object.pk %}">Delete</a>
+    {% endif %}
 </body>
 </html>

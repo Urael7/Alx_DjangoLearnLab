@@ -1,20 +1,18 @@
-{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Create Post</title>
+    <title>Post Form</title>
 </head>
 <body>
+    <h1>Post Form</h1>
 
-<h1>Create New Post</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save</button>
+    </form>
 
-<form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Save</button>
-</form>
-
-<a href="/">Back</a>
-
+    <br>
+    <a href="{% url 'home' %}">Back to Posts</a>
 </body>
 </html>
