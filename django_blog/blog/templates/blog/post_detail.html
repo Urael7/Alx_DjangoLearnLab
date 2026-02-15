@@ -1,0 +1,23 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ post.title }}</title>
+    <link rel="stylesheet" href="{% static 'blog/style.css' %}">
+</head>
+<body>
+
+    <h1>{{ post.title }}</h1>
+    <p>{{ post.content }}</p>
+    <small>Published on: {{ post.published_date }}</small>
+    <br><br>
+{% if user.is_authenticated and user == post.author %}
+    <a href="{% url 'post_update' post.pk %}">Edit</a> |
+    <a href="{% url 'post_delete' post.pk %}">Delete</a>
+{% endif %}
+
+    <br><br>
+    <a href="/">⬅ Back to Home</a>
+
+</body>
+</html>
