@@ -4,7 +4,7 @@ from . import views
 
 urlpatterns = [
     # -----------------------------
-    # Blog CRUD URLs (Checker URLs)
+    # Blog Post CRUD URLs (Checker Required)
     # -----------------------------
     path("", views.PostListView.as_view(), name="home"),
     path("post/<int:pk>/", views.PostDetailView.as_view(), name="post_detail"),
@@ -13,13 +13,11 @@ urlpatterns = [
     path("post/<int:pk>/delete/", views.PostDeleteView.as_view(), name="post_delete"),
 
     # -----------------------------
-    # Blog CRUD URLs (New Friendly URLs)
+    # Comment URLs
     # -----------------------------
-    path("posts/", views.PostListView.as_view(), name="posts_list"),
-    path("posts/<int:pk>/", views.PostDetailView.as_view(), name="posts_detail"),
-    path("posts/new/", views.PostCreateView.as_view(), name="posts_create"),
-    path("posts/<int:pk>/edit/", views.PostUpdateView.as_view(), name="posts_update"),
-    path("posts/<int:pk>/delete/", views.PostDeleteView.as_view(), name="posts_delete"),
+    path("post/<int:pk>/comment/new/", views.add_comment, name="add_comment"),
+    path("comment/<int:pk>/update/", views.CommentUpdateView.as_view(), name="comment_update"),
+    path("comment/<int:pk>/delete/", views.CommentDeleteView.as_view(), name="comment_delete"),
 
     # -----------------------------
     # Authentication URLs
