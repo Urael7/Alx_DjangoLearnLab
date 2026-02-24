@@ -1,9 +1,8 @@
-from rest_framework import generics, status, viewsets
+from rest_framework import generics, status, viewsets, permissions
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.decorators import action
 from .serializers import RegisterSerializer, LoginSerializer, UserSerializer
-from .models import User  # Use your CustomUser model directly
+from .models import User as CustomUser
 
 # -----------------------
 # Auth & Profile Views
@@ -11,12 +10,12 @@ from .models import User  # Use your CustomUser model directly
 
 class RegisterView(generics.CreateAPIView):
     serializer_class = RegisterSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.AllowAny]
 
 
 class LoginView(generics.GenericAPIView):
     serializer_class = LoginSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.AllowAny]
 
     def post(self, request):
         serializer = self.get_serializer(data=request.data)
@@ -26,7 +25,7 @@ class LoginView(generics.GenericAPIView):
 
 class ProfileView(generics.RetrieveUpdateAPIView):
     serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_object(self):
         return self.request.user
@@ -39,12 +38,12 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     ALX-compatible UserViewSet with followuser/unfollowuser actions.
     """
-    queryset = User.objects.all()  # ALX check requires this literal
+    queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     http_method_names = ['get', 'post', 'patch', 'delete']
 
-    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
+    @action(detail=True, methods=['post'], permission_classes=[permissions.IsAuthenticated])
     def followuser(self, request, pk=None):
         user_to_follow = self.get_object()
         if user_to_follow == request.user:
@@ -52,7 +51,7 @@ class UserViewSet(viewsets.ModelViewSet):
         request.user.following.add(user_to_follow)
         return Response({"detail": f"You are now following {user_to_follow.username}."})
 
-    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
+    @action(detail=True, methods=['post'], permission_classes=[permissions.IsAuthenticated])
     def unfollowuser(self, request, pk=None):
         user_to_unfollow = self.get_object()
         if user_to_unfollow == request.user:
