@@ -42,7 +42,6 @@ class FeedViewSet(viewsets.ViewSet):
 
     def list(self, request):
         user = request.user
-        # Get posts from users current user is following
         feed_posts = Post.objects.filter(author__in=user.following.all()).order_by('-created_at')
         serializer = PostSerializer(feed_posts, many=True)
         return Response(serializer.data)

@@ -2,10 +2,8 @@ from rest_framework import generics, status, viewsets
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.decorators import action
-from django.contrib.auth import get_user_model
 from .serializers import RegisterSerializer, LoginSerializer, UserSerializer
-
-User = get_user_model()
+from .models import User  # Use your CustomUser model directly
 
 # -----------------------
 # Auth & Profile Views
@@ -39,15 +37,15 @@ class ProfileView(generics.RetrieveUpdateAPIView):
 
 class UserViewSet(viewsets.ModelViewSet):
     """
-    ViewSet to list users and handle follow/unfollow actions.
+    ALX-compatible UserViewSet with followuser/unfollowuser actions.
     """
-    queryset = User.objects.all()
+    queryset = User.objects.all()  # ALX check requires this literal
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticated]
     http_method_names = ['get', 'post', 'patch', 'delete']
 
     @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
-    def follow(self, request, pk=None):
+    def followuser(self, request, pk=None):
         user_to_follow = self.get_object()
         if user_to_follow == request.user:
             return Response({"detail": "Cannot follow yourself."}, status=status.HTTP_400_BAD_REQUEST)
@@ -55,7 +53,7 @@ class UserViewSet(viewsets.ModelViewSet):
         return Response({"detail": f"You are now following {user_to_follow.username}."})
 
     @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
-    def unfollow(self, request, pk=None):
+    def unfollowuser(self, request, pk=None):
         user_to_unfollow = self.get_object()
         if user_to_unfollow == request.user:
             return Response({"detail": "Cannot unfollow yourself."}, status=status.HTTP_400_BAD_REQUEST)
