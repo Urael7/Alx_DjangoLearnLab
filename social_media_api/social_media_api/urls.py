@@ -6,4 +6,5 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),  # browsable API login
     path('api/', include('posts.urls')),               # posts, comments, feed
     path('api/', include('accounts.urls')),            # users, follow/unfollow, auth
+    path('api/', include('notifications.urls')),       # notifications
 ]

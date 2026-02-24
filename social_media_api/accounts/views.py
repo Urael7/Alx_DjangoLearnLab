@@ -2,8 +2,10 @@ from rest_framework import generics, status, viewsets, permissions
 from rest_framework.response import Response
 from rest_framework.decorators import action, api_view, permission_classes
 from django.shortcuts import get_object_or_404
+from django.contrib.contenttypes.models import ContentType
 from .serializers import RegisterSerializer, LoginSerializer, UserSerializer
 from .models import User as CustomUser
+from notifications.models import Notification
 
 # -----------------------
 # Auth & Profile Views
@@ -50,6 +52,13 @@ class UserViewSet(viewsets.ModelViewSet):
         if user_to_follow == request.user:
             return Response({"detail": "Cannot follow yourself."}, status=status.HTTP_400_BAD_REQUEST)
         request.user.following.add(user_to_follow)
+        Notification.objects.create(
+            recipient=user_to_follow,
+            actor=request.user,
+            verb='started following you',
+            target_content_type=ContentType.objects.get_for_model(user_to_follow),
+            target_object_id=user_to_follow.id,
+        )
         return Response({"detail": f"You are now following {user_to_follow.username}."})
 
     @action(detail=True, methods=['post'], permission_classes=[permissions.IsAuthenticated])
@@ -68,6 +77,13 @@ def follow_user(request, user_id):
     if user_to_follow == request.user:
         return Response({"detail": "Cannot follow yourself."}, status=status.HTTP_400_BAD_REQUEST)
     request.user.following.add(user_to_follow)
+    Notification.objects.create(
+        recipient=user_to_follow,
+        actor=request.user,
+        verb='started following you',
+        target_content_type=ContentType.objects.get_for_model(user_to_follow),
+        target_object_id=user_to_follow.id,
+    )
     return Response({"detail": f"You are now following {user_to_follow.username}."}, status=status.HTTP_200_OK)
 
 
